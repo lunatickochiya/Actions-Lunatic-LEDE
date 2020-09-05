@@ -16,7 +16,6 @@ on:
       - main
     paths:
       - '7620.config'
-      - 'startcompileall'
 #  schedule:
 #    - cron: 0 8 * * 5
 #  watch:

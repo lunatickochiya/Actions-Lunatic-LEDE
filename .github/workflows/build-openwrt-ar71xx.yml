@@ -16,7 +16,6 @@ on:
       - main
     paths:
       - 'ar71xx.config'
-      - 'startcompileall'
 #  schedule:
 #    - cron: 0 8 * * 5
 #  watch:
