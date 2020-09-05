@@ -1,0 +1,158 @@
+#=================================================
+# https://github.com/P3TERX/Actions-OpenWrt
+# Description: Build OpenWrt using GitHub Actions
+# Lisence: MIT
+# Author: P3TERX
+# Blog: https://p3terx.com
+#=================================================
+
+name: Build OpenWrt DW33D NAND
+
+on:
+  repository_dispatch:
+  release:
+    types: [published]
+  push:
+    branches:
+      - master
+    paths:
+      - 'dw33d.config'
+      - 'startcompileall'
+#  schedule:
+#    - cron: 0 8 * * 5
+  watch:
+    types: [started]
+
+env:
+  REPO_URL: https://github.com/lunatickochiya/lunatic-lede
+  REPO_BRANCH: lede-17.01-lienol
+  CONFIG_FILE: dw33d.config
+  DIY_SH: diy.sh
+  AFB_SH: after_build.sh
+  FREE_UP_DISK: true
+  SSH_ACTIONS: false
+  UPLOAD_FIRMWARE: true
+  UPLOAD_COWTRANSFER: true
+  UPLOAD_WETRANSFER: true
+  TZ: Asia/Shanghai
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    if: github.event.repository.owner.id == github.event.sender.id
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+        sudo -E apt-get -qq update
+        sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-1804)
+        sudo -E apt-get -qq autoremove --purge
+        sudo -E apt-get -qq clean
+        sudo timedatectl set-timezone "$TZ"
+        sudo mkdir -p /workdir
+        sudo chown $USER:$GROUPS /workdir
+
+    - name: Clone source code
+      id: csc
+      run: |
+        git clone $REPO_URL -b $REPO_BRANCH openwrt
+        [ -d mypatch ] && mv -f mypatch openwrt/mypatch
+        [ -d package ] && mv -f package openwrt/package
+        echo "::set-output name=status::success"
+
+    - name: Hack source code
+      id: hsc
+      if: steps.csc.outputs.status == 'success' && !cancelled()
+      run: |
+        chmod +x $DIY_SH $AFB_SH
+        cd openwrt
+        ../$DIY_SH
+      
+    - name: Update feeds
+      run: cd openwrt && ./scripts/feeds update -a
+
+    - name: Install feeds
+      run: cd openwrt && ./scripts/feeds install -a
+
+    - name: Load custom configuration
+      run: |
+        [ -e files ] && mv files openwrt/files
+        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+        cd openwrt
+        make defconfig
+
+    - name: SSH connection to Actions
+      uses: P3TERX/debugger-action@master
+      if: env.SSH_ACTIONS == 'true'
+
+    - name: Download package
+      id: package
+      run: |
+        cd openwrt
+        make download -j8
+        find dl -size -1024c -exec ls -l {} \;
+        find dl -size -1024c -exec rm -f {} \;
+
+    - name: Compile the firmware
+      id: compile
+      run: |
+        cd openwrt
+        echo -e "$(nproc) thread compile"
+        make -j$(nproc) || make -j1 V=s
+        echo "::set-output name=status::success"
+
+    - name: After Build
+      id: afb
+      if: steps.compile.outputs.status == 'success' && !cancelled()
+      run: |
+        cd openwrt
+        ../$AFB_SH
+        echo "::set-output name=status::success"
+
+    - name: Organize files
+      id: organize
+      if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      run: |
+        cd openwrt/bin/targets/*/*
+        echo "::set-env name=FIRMWARE::$(pwd)"
+        echo "::set-output name=status::success"
+
+    - name: Upload firmware directory
+      uses: actions/upload-artifact@master
+      if: steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        name: OpenWrt_firmware
+        path: ${{ env.FIRMWARE }}
+
+    - name: Upload packages
+      uses: actions/upload-artifact@master
+      with:
+        name: OpenWrt_packages
+        path: openwrt/bin/packages
+
+    - name: Upload sysupgrade directory
+      uses: actions/upload-artifact@master
+      if: steps.afb.outputs.status == 'success' && !cancelled()
+      with:
+        name: OpenWrt_sysupgrade
+        path: openwrt/out
+
+    - name: Upload firmware to cowtransfer
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
+      run: |
+        curl -fsSL git.io/file-transfer | sh
+        ./transfer cow --block 2621440 -s -p 64 --no-progress ${FIRMWARE} 2>&1 | tee cowtransfer.log
+        echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
+
+    - name: Upload firmware to WeTransfer
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
+      run: |
+        curl -fsSL git.io/file-transfer | sh
+        ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
+        echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
