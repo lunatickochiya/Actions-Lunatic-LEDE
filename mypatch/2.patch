@@ -1,0 +1,12 @@
+diff --git a/feeds.conf.default b/feeds.conf.default
+index ac800b1..fd77481 100644
+--- a/feeds.conf.default
++++ b/feeds.conf.default
+@@ -2,4 +2,4 @@ src-git packages https://github.com/lunatickochiya/packages-lunatic.git;lede-17.
+ src-git luci https://github.com/lunatickochiya/luci-lunatic.git;lede-17.01
+ src-git routing https://github.com/lunatickochiya/routing-lunatic.git;lede-17.01
+ src-git telephony https://github.com/lunatickochiya/telephony-lunatic.git;lede-17.01
+-src-git private https://github.com/lunatickochiya/my-package.git
+\ No newline at end of file
++src-git lienol https://github.com/xiaorouji/openwrt-package
+\ No newline at end of file
