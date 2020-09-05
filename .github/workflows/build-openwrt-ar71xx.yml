@@ -22,8 +22,8 @@ on:
 #    types: [started]
 
 env:
-  REPO_URL: https://github.com/lunatickochiya/openwrt-19-07
-  REPO_BRANCH: openwrt-19.07
+  REPO_URL: https://github.com/lunatickochiya/lunatic-lede
+  REPO_BRANCH: lede-17.01
   CONFIG_FILE: ar71xx.config
   DIY_SH: diy.sh
   AFB_SH: after_build.sh
