@@ -14,9 +14,10 @@ on:
     types: [published]
   push:
     branches:
-      - main
+      - master
     paths:
       - 'ar71xx.config'
+      - 'startcompileall'
 #  schedule:
 #    - cron: 0 8 * * 5
   watch:
@@ -42,7 +43,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@main
+      uses: actions/checkout@master
 
     - name: Initialization environment
       env:
@@ -87,7 +88,7 @@ jobs:
         make defconfig
 
     - name: SSH connection to Actions
-      uses: P3TERX/debugger-action@main
+      uses: P3TERX/debugger-action@master
       if: env.SSH_ACTIONS == 'true'
 
     - name: Download package
@@ -123,20 +124,20 @@ jobs:
         echo "::set-output name=status::success"
 
     - name: Upload firmware directory
-      uses: actions/upload-artifact@main
+      uses: actions/upload-artifact@master
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
         name: OpenWrt_firmware
         path: ${{ env.FIRMWARE }}
 
     - name: Upload packages
-      uses: actions/upload-artifact@main
+      uses: actions/upload-artifact@master
       with:
         name: OpenWrt_packages
         path: openwrt/bin/packages
 
     - name: Upload sysupgrade directory
-      uses: actions/upload-artifact@main
+      uses: actions/upload-artifact@master
       if: steps.afb.outputs.status == 'success' && !cancelled()
       with:
         name: OpenWrt_sysupgrade
