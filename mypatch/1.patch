@@ -1,5 +1,5 @@
 --- -	2020-09-05 18:48:11.821235263 +0800
-+++ /package/kernel/cryptodev-linux/patches/1.patch	2020-02-06 19:05:42.000000000 +0800
++++ b/package/kernel/cryptodev-linux/patches/1.patch	2020-02-06 19:05:42.000000000 +0800
 @@ -1 +1,35 @@
 +--- a/zc.c
 ++++ b/zc.c
@@ -36,4 +36,3 @@
 + 	up_read(&mm->mmap_sem);
 + 	if (ret != pgcount)
 + 		return -EINVAL;
- 
