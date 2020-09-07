@@ -1,0 +1,48 @@
+diff --git a/feeds/lienol/package/trojan-go/Makefile b/feeds/lienol/package/trojan-go/Makefile
+index e6326b0..1ba4215 100644
+--- a/feeds/lienol/package/trojan-go/Makefile
++++ b/feeds/lienol/package/trojan-go/Makefile
+@@ -72,7 +72,7 @@ define Build/Compile
+ 	$(call GoPackage/Build/Configure)
+ 	$(call GoPackage/Build/Compile,$(GO_PKG_TAG))
+ ifeq ($(CONFIG_TROJAN_GO_COMPRESS_UPX),y)
+-	$(STAGING_DIR_HOST)/bin/upx --lzma --best $(GO_PKG_BUILD_BIN_DIR)/$(PKG_NAME)
++	upx --lzma --best $(GO_PKG_BUILD_BIN_DIR)/$(PKG_NAME)
+ endif
+ endef
+ 
+diff --git a/feeds/lienol/package/v2ray-plugin/Makefile b/feeds/lienol/package/v2ray-plugin/Makefile
+index 5051054..28c483e 100644
+--- a/feeds/lienol/package/v2ray-plugin/Makefile
++++ b/feeds/lienol/package/v2ray-plugin/Makefile
+@@ -63,7 +63,7 @@ endef
+ 
+ define Build/Compile
+ 	$(call GoPackage/Build/Compile)
+-	$(STAGING_DIR_HOST)/bin/upx --lzma --best $(GO_PKG_BUILD_BIN_DIR)/v2ray-plugin
++	upx --lzma --best $(GO_PKG_BUILD_BIN_DIR)/v2ray-plugin
+ endef
+ 
+ define Package/$(PKG_NAME)/install
+diff --git a/feeds/lienol/package/v2ray/Makefile b/feeds/lienol/package/v2ray/Makefile
+index 09403dc..2b33812 100755
+--- a/feeds/lienol/package/v2ray/Makefile
++++ b/feeds/lienol/package/v2ray/Makefile
+@@ -270,7 +270,7 @@ define Build/Compile
+ 	mv -f $(GO_PKG_BUILD_BIN_DIR)/main $(GO_PKG_BUILD_BIN_DIR)/v2ray
+ 
+ ifeq ($(CONFIG_V2RAY_COMPRESS_UPX),y)
+-	$(STAGING_DIR_HOST)/bin/upx --lzma --best $(GO_PKG_BUILD_BIN_DIR)/v2ray
++	upx --lzma --best $(GO_PKG_BUILD_BIN_DIR)/v2ray
+ endif
+ 
+ ifneq ($(CONFIG_V2RAY_EXCLUDE_V2CTL),y)
+@@ -279,7 +279,7 @@ ifneq ($(CONFIG_V2RAY_EXCLUDE_V2CTL),y)
+ 	mv -f $(GO_PKG_BUILD_BIN_DIR)/main $(GO_PKG_BUILD_BIN_DIR)/v2ctl
+ 
+ ifeq ($(CONFIG_V2RAY_COMPRESS_UPX),y)
+-	$(STAGING_DIR_HOST)/bin/upx --lzma --best $(GO_PKG_BUILD_BIN_DIR)/v2ctl
++	upx --lzma --best $(GO_PKG_BUILD_BIN_DIR)/v2ctl
+ endif
+ endif
+ endef
