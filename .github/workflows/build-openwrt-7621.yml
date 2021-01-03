@@ -143,13 +143,13 @@ jobs:
         path: ${{ env.FIRMWARE }}
 
     - name: Upload packages
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       with:
         name: OpenWrt_packages
         path: openwrt/bin/packages
 
     - name: Upload sysupgrade directory
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.afb.outputs.status == 'success' && !cancelled()
       with:
         name: OpenWrt_sysupgrade
