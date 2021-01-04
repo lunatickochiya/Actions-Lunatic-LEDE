@@ -6,7 +6,7 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Build OpenWrt ar71xx
+name: Build OpenWrt GHL
 
 on:
   repository_dispatch:
@@ -16,8 +16,8 @@ on:
     branches:
       - master
     paths:
-      - 'ar71xx.config'
-#      - 'startcompileall'
+      - 'ghl.config'
+      - 'startcompileall'
 #  schedule:
 #    - cron: 0 8 * * 5
   watch:
@@ -26,7 +26,8 @@ on:
 env:
   REPO_URL: https://github.com/lunatickochiya/lunatic-lede
   REPO_BRANCH: lede-17.01-lienol
-  CONFIG_FILE: ar71xx.config
+  FEEDS_CONF: feeds.conf.default
+  CONFIG_FILE: ghl.config
   DIY_P1_SH: diy.sh
   DIY_P2_SH: after_build.sh
   UPLOAD_BIN_DIR: false
@@ -36,7 +37,6 @@ env:
   UPLOAD_WETRANSFER: true
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
-  FEEDS_CONF: feeds.conf.default
 
 jobs:
   build:
