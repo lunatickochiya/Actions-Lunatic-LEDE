@@ -7,7 +7,14 @@
 
 #cd openwrt
 mkdir out
+mkdir kernelipks
+mkdir ipks
 rm -rf build_dir/target* build_dir/toolchain* staging_dir/target* staging_dir/toolchain*
+cp -u -f bin/targets/*/*/packages kernelipks/
 cp -u -f bin/targets/*/*/*-*-squashfs-sysupgrade.bin out/
+cp -u -f bin/packages ipks/
+zip -qq -r kernelipks.zip kernelipks
+zip -qq -r out.zip out
+zip -qq -r ipks.zip ipks
 # Enter your commands here, e.g.
 echo "Copy Success!"
