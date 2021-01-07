@@ -16,5 +16,9 @@ cp -u -f -r bin/packages/* ipks/
 zip -qq -r kernelipks.zip kernelipks
 zip -qq -r out.zip out
 zip -qq -r ipks.zip ipks
+echo "Copy Zip Success!"
+sleep 10
+cp -u -f openwrt/kernelipks.zip openwrt/bin/targets/*/*/
+cp -u -f openwrt/ipks.zip openwrt/bin/targets/*/*/
 # Enter your commands here, e.g.
-echo "Copy Success!"
+echo "Copy IPK Success!"
