@@ -18,7 +18,7 @@ zip -qq -r out.zip out
 zip -qq -r ipks.zip ipks
 echo "Copy Zip Success!"
 sleep 10
-cp -u -f kernelipks.zip openwrt/bin/targets/*/*/
-cp -u -f ipks.zip openwrt/bin/targets/*/*/
+cp -u -f kernelipks.zip openwrt/bin/targets/*/*/kernelipks.zip
+cp -u -f ipks.zip openwrt/bin/targets/*/*/ipks.zip
 # Enter your commands here, e.g.
 echo "Copy IPK Success!"
