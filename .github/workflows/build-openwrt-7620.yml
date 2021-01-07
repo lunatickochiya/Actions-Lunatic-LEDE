@@ -122,7 +122,7 @@ jobs:
       if: steps.compile.outputs.status == 'success' && !cancelled()
       run: |
         cd openwrt
-        ../$DIY_P2_SH
+        $GITHUB_WORKSPACE/$DIY_P2_SH
         echo "::set-output name=status::success"
 
     - name: Upload bin directory
@@ -199,7 +199,7 @@ jobs:
       uses: dev-drprasad/delete-older-releases@v0.1.0
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
-        keep_latest: 6
+        keep_latest: 18
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

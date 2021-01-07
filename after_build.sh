@@ -9,6 +9,7 @@
 mkdir out
 mkdir kernelipks
 mkdir ipks
+mkdir sdk
 rm -rf build_dir/target* build_dir/toolchain* staging_dir/target* staging_dir/toolchain*
 cp -u -f bin/targets/*/*/packages/* kernelipks/
 cp -u -f bin/targets/*/*/*-*-squashfs-sysupgrade.bin out/
