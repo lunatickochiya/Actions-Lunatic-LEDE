@@ -18,8 +18,8 @@ zip -qq -r kernelipks.zip kernelipks
 zip -qq -r out.zip out
 zip -qq -r ipks.zip ipks
 echo "Copy Zip Success!"
-sleep 10
-cp -f kernelipks.zip bin/targets/*/
-cp -f ipks.zip bin/targets/*/*/
+
+#cp -f kernelipks.zip bin/targets/*/
+#cp -f ipks.zip bin/targets/*/*/
 # Enter your commands here, e.g.
-echo "Copy IPK Success!"
+#echo "Copy IPK Success!"
