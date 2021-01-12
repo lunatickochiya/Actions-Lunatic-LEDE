@@ -6,7 +6,7 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Build OpenWrt GHL
+name: Build OpenWrt Arch
 
 on:
   repository_dispatch:
@@ -16,7 +16,7 @@ on:
     branches:
       - master
     paths:
-      - 'ghl.config'
+      - 'startcompileall-arch'
       - 'startcompileall'
 #  schedule:
 #    - cron: 0 8 * * 5
@@ -26,8 +26,6 @@ on:
 env:
   REPO_URL: https://github.com/lunatickochiya/lunatic-lede
   REPO_BRANCH: lede-17.01-lienol
-  FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: ghl.config
   DIY_P1_SH: diy.sh
   DIY_P2_SH: after_build.sh
   UPLOAD_BIN_DIR: false
@@ -37,10 +35,20 @@ env:
   UPLOAD_WETRANSFER: true
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
+  FEEDS_CONF: feeds.conf.default
 
 jobs:
   build:
     runs-on: ubuntu-18.04
+    
+    name: Build OpenWrt ${{matrix.target}}
+    strategy:
+    fail-fast: false
+    matrix:
+        include:
+          - target: 7620
+          - target: 7621
+          - target: ar71xx
 
     steps:
     - name: Checkout
@@ -82,6 +90,8 @@ jobs:
       run: cd openwrt && ./scripts/feeds install -a
 
     - name: Load custom configuration
+      env:
+      CONFIG_FILE: ${{matrix.target}}.config
       run: |
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
@@ -199,7 +209,7 @@ jobs:
       uses: dev-drprasad/delete-older-releases@v0.1.0
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
-        keep_latest: 9
+        keep_latest: 18
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
