@@ -43,8 +43,8 @@ jobs:
     
     name: Build OpenWrt ${{matrix.target}}
     strategy:
-    fail-fast: false
-    matrix:
+      fail-fast: false
+      matrix:
         include:
           - target: csac
           - target: hualu
