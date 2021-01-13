@@ -16,8 +16,5 @@ sleep 3
             patch -p1 < mypatch/$i
         done
 sleep 6
-for file in .config
-do
-echo "CONFIG_PACKAGE_luci-app-control-weburl=y" >> $file
-echo "CONFIG_PACKAGE_luci-app-fileassistant=y" >> $file
-done
+echo "CONFIG_PACKAGE_luci-app-control-weburl=y" >> .config
+echo "CONFIG_PACKAGE_luci-app-fileassistant=y" >> .config
