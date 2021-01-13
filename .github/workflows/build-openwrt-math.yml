@@ -195,7 +195,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.tag.outputs.release_tag }}
+        tag_name: ${{ steps.tag.outputs.release_tag }}-${{matrix.target}}
         body_path: release.txt
         files: |
             openwrt/out/*
