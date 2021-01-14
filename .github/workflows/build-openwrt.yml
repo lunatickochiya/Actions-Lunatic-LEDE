@@ -69,22 +69,35 @@ jobs:
         
     - name: Clone source code
       working-directory: /workdir
+      id: clone
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        echo "::set-output name=status::success"
+
+    - name: Load custom files packages
+      if: steps.clone.outputs.status == 'success'
+      id: files
+      run: |
+        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
+        [ -d mypatch ] && mv -f mypatch openwrt/mypatch
+        [ -d package ] && mv -f package openwrt/package
+        echo "::set-output name=status::success"
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
 
     - name: Install feeds
-      run: cd openwrt && ./scripts/feeds install -a
+      if: steps.files.outputs.status == 'success'
+      id: feeds
+      run: |
+        cd openwrt && ./scripts/feeds install -a
+        echo "::set-output name=status::success"
 
     - name: Load custom configuration 
+      if: steps.feeds.outputs.status == 'success'
       run: |
-        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
-        [ -d mypatch ] && mv -f mypatch openwrt/mypatch
-        [ -d package ] && mv -f package openwrt/package
         [ -e files ] && mv files openwrt/files
         [ -e ${{matrix.target}}.config ] && mv ${{matrix.target}}.config openwrt/.config
         chmod +x $DIY_P1_SH $DIY_P2_SH
