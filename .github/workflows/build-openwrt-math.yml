@@ -53,6 +53,7 @@ jobs:
           - target: d1
           - target: d2
           - target: dw33d
+          - target: dw33d-wifi
           - target: y1
 
     steps:
