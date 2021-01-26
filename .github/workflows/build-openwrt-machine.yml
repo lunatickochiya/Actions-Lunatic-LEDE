@@ -16,7 +16,7 @@ on:
     branches:
       - master
     paths:
-      - 'startcompileall-math'
+      - 'startcompileall-machine'
       - 'startcompileall'
 #  schedule:
 #    - cron: 0 8 * * 5
@@ -55,6 +55,7 @@ jobs:
           - target: dw33d
           - target: dw33d-wifi
           - target: y1
+          - target: pisen
 
     steps:
     - name: Checkout
