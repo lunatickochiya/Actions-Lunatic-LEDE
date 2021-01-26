@@ -106,7 +106,7 @@ jobs:
       if: steps.feeds.outputs.status == 'success'
       run: |
         [ -e files ] && mv files openwrt/files
-        [ -e math-configs/${{matrix.target}}.config ] && mv math-configs/${{matrix.target}}.config openwrt/.config
+        [ -e machine-configs/${{matrix.target}}.config ] && mv machine-configs/${{matrix.target}}.config openwrt/.config
         chmod +x $DIY_P1_SH $DIY_P2_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P1_SH
