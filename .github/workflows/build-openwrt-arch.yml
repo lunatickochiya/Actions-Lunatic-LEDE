@@ -47,6 +47,7 @@ jobs:
       matrix:
         include:
           - target: 7620
+          - target: 7620-tkv
           - target: 7621
           - target: ar71xx
 
