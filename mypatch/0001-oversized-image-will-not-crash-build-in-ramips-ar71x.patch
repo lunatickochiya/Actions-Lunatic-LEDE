@@ -77,6 +77,16 @@ diff --git a/target/linux/ramips/image/Makefile b/target/linux/ramips/image/Make
 index 255aa8c..50e2ff0 100644
 --- a/target/linux/ramips/image/Makefile
 +++ b/target/linux/ramips/image/Makefile
+@@ -52,7 +52,8 @@ define Build/trx
+ 		-o $@ \
+ 		-m $(IMAGE_SIZE) \
+ 		-f $(IMAGE_KERNEL) \
+-		-a 4 -f $(IMAGE_ROOTFS)
++		-a 4 -f $(IMAGE_ROOTFS) \
++		echo ""
+ endef
+ 
+ define Build/relocate-kernel
 @@ -77,27 +77,32 @@ define MkCombineduImage
  endef
  
