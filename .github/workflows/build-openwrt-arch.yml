@@ -50,6 +50,7 @@ jobs:
           - target: 7620-tkv
           - target: 7621
           - target: ar71xx
+          - target: at
 
     steps:
     - name: Checkout
